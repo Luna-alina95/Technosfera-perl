@@ -19,10 +19,33 @@ no warnings 'experimental';
 
 sub evaluate {
 	my $rpn = shift;
+	my @res;
+	my $i;
+	my $el1; my $el2;
 
-	# ...
-
-	return 0;
+for ($i = 0; $i < $#rpn+1; $i++) {
+	if ($rpn[$i] =~ (/\d/)) {
+		push(@res,$rpn[$i]);
+	} elsif ($rpn[$i] eq 'U-') {
+		$el1 = pop(@res);
+		push(@res, '-'.$el1);
+	} elsif ($rpn[$i] eq 'U+') {
+		$el1 = pop(@res);
+		push(@res, $el1);
+	} 
+	else {
+		$el1 = pop(@res);
+		$el2 = pop(@res);
+		given($rpn[$i])	 {
+			when('+') {push(@res, $el2 + $el1); }			
+			when('-') {push(@res, $el2 - $el1); }
+			when('*') {push(@res, $el2 * $el1); }
+			when('/') {push(@res, $el2 / $el1); }
+			when('^') {push(@res, $el2 ** $el1); }
+		}	
+	}
+} 
+	return $res[0];
 }
 
 1;
