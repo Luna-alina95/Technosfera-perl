@@ -11,6 +11,7 @@ use 5.010;
 use strict;
 use warnings;
 use diagnostics;
+use Data::Dumper;
 BEGIN{
 	if ($] < 5.018) {
 		package experimental;
@@ -45,10 +46,10 @@ sub rpn {
 	my @opr; #стек для операций
 	my $out_in;
 	my $i;
-	
+	#print Dumper(@res)."\n\n\n\n";
 for($i=0; $i<=$#res; $i++) { #Рассматриваем поочередно каждый символ:	
 	if ($res[$i] eq '(' || $res[$i] eq ')' || $res[$i] eq '+'|| $res[$i] eq '-'|| $res[$i] eq '*'|| $res[$i] eq '/' || $res[$i] eq '^' || $res[$i] eq 'U-' || $res[$i] eq 'U+') {	
-
+#print "Почему сюда не заходит?\n";
 		if ($res[$i] eq ')') {
 			while($opr[-1] ne '(') {
 				$out_in = pop(@opr);
@@ -65,7 +66,7 @@ for($i=0; $i<=$#res; $i++) { #Рассматриваем поочередно к
 				push(@rpn,$out_in);
 			}
 			push(@opr,$res[$i]);
-		} 
+		}
 	} else {
 		push(@rpn,$res[$i]);
 	}
@@ -79,7 +80,7 @@ for($i=0; $i<=$#res; $i++) { #Рассматриваем поочередно к
 
 	# извлекаем оставшиеся символы в стеке
 	#push @rpn, reverse @opr;
-
+#print Dumper(@rpn)."\n\n\n\n";
 	return \@rpn;
 }
 
