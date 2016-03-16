@@ -22,21 +22,21 @@ sub evaluate {
 	my @res;
 	my $i;
 	my $el1; my $el2;
-
-for ($i = 0; $i < $#rpn+1; $i++) {
-	if ($rpn[$i] =~ (/\d/)) {
-		push(@res,$rpn[$i]);
-	} elsif ($rpn[$i] eq 'U-') {
+foreach my $el (@{$rpn}) {
+	print "zzzzzzzzzzzzzz\n\n\n";
+	if ($el =~ (/\d/)) {
+		push(@res,$el);
+	} elsif ($el eq 'U-') {
 		$el1 = pop(@res);
 		push(@res, '-'.$el1);
-	} elsif ($rpn[$i] eq 'U+') {
+	} elsif ($el eq 'U+') {
 		$el1 = pop(@res);
 		push(@res, $el1);
 	} 
 	else {
 		$el1 = pop(@res);
 		$el2 = pop(@res);
-		given($rpn[$i])	 {
+		given($el)	 {
 			when('+') {push(@res, $el2 + $el1); }			
 			when('-') {push(@res, $el2 - $el1); }
 			when('*') {push(@res, $el2 * $el1); }
@@ -44,6 +44,7 @@ for ($i = 0; $i < $#rpn+1; $i++) {
 			when('^') {push(@res, $el2 ** $el1); }
 		}	
 	}
+	
 } 
 	return $res[0];
 }

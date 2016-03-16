@@ -87,20 +87,21 @@ my $ch_str;
 						$last = substr $expr, $i, 1;
 						while($last eq ' ' and $i < length  $expr) {$i++; $last = substr $expr, $i, 1;}
 						$i--;
-					if($last ne ')') {
 
-					if ($res[$#res] =~ (/\d/) or 
-						$res[$#res] eq ")") { 
- 							push(@res,$ch_str);
-					} elsif ($#res == -1 or $last eq '(' or $last =~ /\d/)
-						{
-						if ($ch_str eq '+') {
-							push(@res,'U+');
-						} elsif ($ch_str eq '-') {
-							push(@res,'U-');
-						}
+					if($last ne ')') {
+						if ($res[$#res] =~ (/\d/) or 
+							$res[$#res] eq ")") { 
+ 								push(@res,$ch_str);
+						} elsif ($#res == -1 or $last eq '(' or $last =~ /\d/)
+							{
+							if ($ch_str eq '+') {
+								push(@res,'U+');
+							} elsif ($ch_str eq '-') {
+								push(@res,'U-');
+							}
+						} else {die "Некорректное выражение (+,-,*,/): '$expr'";}
 					} else {die "Некорректное выражение (+,-,*,/): '$expr'";}
-					} else {die "Некорректное выражение (+,-,*,/): '$expr'";}
+
 				} else {die "Некорректное выражение (+,-,*,/): '$expr'";}
 								
 			}
@@ -109,7 +110,7 @@ my $ch_str;
 					my $last;
 					$i++;
 					$last = substr $expr, $i, 1;
-					while($last eq ' ') {$last = substr $expr, $i, 1; $i++;}
+					while($last eq ' ') {$i++; $last = substr $expr, $i, 1;}
 					$i--;	
 					if($last =~ /\d/ or $last eq '-' or $last eq '+' or $last eq '(' or $last eq '.') {
 						push(@res,$ch_str);
@@ -131,11 +132,9 @@ my $ch_str;
 								$ch_str = substr $expr, $i, 1;
 							}
 						$i--;
-							#Строка в число. Не работает?							
-							$res[$#res] = +$res[$#res];
-						if ($res[$#res] =~ /0e*/) {
-							$res[$#res]  = 0;		
-						}
+						#if ($res[$#res] =~ /0e*/ or $res[$#res] =~ /0E*/) {
+						#	$res[$#res]  = 0;		
+						#}
 						$res[$#res] = 0 + $res[$#res];	
 					} else {die "Неккоректное выражение (e): '$expr'";}
 				} else {die "Неккоректное выражение (e): '$expr'";}

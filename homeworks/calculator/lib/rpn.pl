@@ -41,37 +41,36 @@ given($expr) {
 
 sub rpn {
 	my $expr = shift;
-	my @res = tokenize($expr);
+	my $res = tokenize($expr); #в $res храниться ссылка на массив
 	my @rpn; #обратная польская нотация
 	my @opr; #стек для операций
 	my $out_in;
-	my $i;
 	#print Dumper(@res)."\n\n\n\n";
-for($i=0; $i<=$#res; $i++) { #Рассматриваем поочередно каждый символ:	
-	if ($res[$i] eq '(' || $res[$i] eq ')' || $res[$i] eq '+'|| $res[$i] eq '-'|| $res[$i] eq '*'|| $res[$i] eq '/' || $res[$i] eq '^' || $res[$i] eq 'U-' || $res[$i] eq 'U+') {	
-#print "Почему сюда не заходит?\n";
-		if ($res[$i] eq ')') {
+
+foreach my $el (@{$res}) {
+	if ($el eq '(' || $el eq ')' || $el eq '+'|| $el eq '-'|| $el eq '*'|| $el eq '/' || $el eq '^' || $el eq 'U-' || $el eq 'U+') {	
+		if ($el eq ')') {
 			while($opr[-1] ne '(') {
 				$out_in = pop(@opr);
 				push(@rpn,$out_in);
 			} 
 			pop(@opr); #Удаляем "("
-		} elsif($res[$i] eq '(') {
-			push(@opr,$res[$i]);
-		} elsif ($#opr == -1 || prior($opr[-1]) < prior($res[$i])) {
-			push(@opr,$res[$i]);
-		} elsif (prior($opr[-1]) >= prior($res[$i])) {		
-			while(@opr && (prior($opr[-1]) >= $res[$i]) && $opr[-1] ne '(') {
+		} elsif($el eq '(') {
+			push(@opr,$el);
+		} elsif ($#opr == -1 || prior($opr[-1]) < prior($el)) {
+			push(@opr,$el);
+		} elsif (prior($opr[-1]) >= prior($el)) {		
+			while(@opr && (prior($opr[-1]) >= $el) && $opr[-1] ne '(') {
 				$out_in = pop(@opr);
 				push(@rpn,$out_in);
 			}
-			push(@opr,$res[$i]);
+			push(@opr,$el);
 		}
 	} else {
-		push(@rpn,$res[$i]);
+		push(@rpn,$el);
 	}
-	
-} 
+}
+
 	# извлекаем оставшиеся символы в стеке
 	while($#opr != -1) {
 		$out_in = pop(@opr);
